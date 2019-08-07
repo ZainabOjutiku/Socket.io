@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" type="text/css" href="main.css">
+        <title>Group Chat</title>
+        <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    
+    </head>
+    <body>
+        <div id="box">
+            <h3>Conversation Board</h3>
+            <div id="chatbox"></div>
+            <input id="mes" type="text" placeholder="Enter your message">
+            <button id="but" type="button">Send</button>
+            <button id="noti" type="button">Notify everyone</button>
+        </div>
+        <script type="text/javascript">
+        $(document).ready(function(e){
+            //prompt to get the client name
+            var name = prompt("what is your name") ;
+            var socket = io();
+            var elem = document.getElementById('chatbox');
+
+            //gets the name of the user and store in a dictionary.emits to the server
+            socket.emit("new",{name:name})
+
+            //looped through older messages to show to the new user
+            socket.on("previous_msg",function(data){
+                for(i in data) {
+                    $("#chatbox").append("<p>"+data[i].name+": "+ data[i].message +"</p>");  	
+                    console.log(data[i].name,data[i].message);
+                    elem.scrollTop = elem.scrollHeight;
+                 }
+             })
+
+             //new user joined the chat
+            socket.on('new_user', function(data){
+            $("#chatbox").append("<p style='color:green'>"+data.name+" has joined the chat"+"</p>");  	
+            elem.scrollTop = elem.scrollHeight;
+
+            });
+            
+            //new message is emitted to the server
+            $("#but").click(function(e){
+                e.preventDefault(); // prevents the page from reloading
+                console.log("clicked button");
+                socket.emit("new_message",{name:name, message:$("#mes").val()});
+                $("#mes").val(" "); //empty out the input message
+                return false;
+
+            })
+            //shows all messages with the user
+            socket.on("all_messages",function(data){
+                $("#chatbox").append("<p style='color:black'>"+data.name+": "+data.message+"</p>"); 
+                elem.scrollTop = elem.scrollHeight;
+ 	
+                })
+
+                //notification is triggered to all the clients
+            $("#noti").click(function(e){
+                e.preventDefault();
+                console.log("notification");
+                socket.emit("notification",{name:name});
+
+            })
+
+            //notification
+            socket.on("new_notification", function(data){
+                $("#chatbox").append("<p style='color:blue'>"+data.name+":just triggered a notification "+"</p>"); 
+                elem.scrollTop = elem.scrollHeight;
+            })
+
+            //user disconnect
+            socket.on("user_disconnect",function(data){
+                $("#chatbox").append("<p style='color:red'>"+data.name+":has left the chat "+"</p>"); 
+                elem.scrollTop = elem.scrollHeight;
+ 	
+
+
+
+})
+        })
+        
+        </script>
+    </body>
+</html>

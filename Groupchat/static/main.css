@@ -1,0 +1,38 @@
+#box{
+    font-display: white;
+    width: 43rem;
+    height: 50rem;
+    margin: 0.5rem auto;
+    background-image: url("https://htmlcolorcodes.com/assets/images/html-color-codes-color-tutorials-hero-00e10b1f.jpg");
+
+}
+#chatbox {
+    width: 40rem;
+    height: 35rem;
+    margin: 0.25rem auto;
+    overflow: auto;
+    border: 0.25rem solid black;
+    /* background-image: url("https://htmlcolorcodes.com/assets/images/html-color-codes-color-tutorials-hero-00e10b1f.jpg"); */
+    background-color: #cccccc;
+
+}
+#mes{
+    width: 40rem;
+    height: 2rem;
+    margin: 0.50rem 1.40rem;
+}
+#but {
+    display: block;
+    float: right;
+    padding: 0.50rem;
+    margin-right: 1.40rem;
+    font-weight: bold;
+}
+#noti{
+    display: block;
+    float: right;
+    padding: 0.50rem;
+    font-weight: bold;
+    background-color: blue;
+
+}

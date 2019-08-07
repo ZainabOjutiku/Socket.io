@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        .container{
+            width: 600px;
+            height: 200px;
+            background-color: beige;
+            border:2px solid black;
+            margin: 100px;
+            border-radius: 25px;
+
+        }
+        
+
+        button {
+            background-color: blue;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: auto;
+            border-radius: 25px;
+
+        }
+        #reset{
+            background-color: red;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: auto;
+            border-radius: 25px;
+
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>Epic button</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    
+</head>
+
+<body>
+    <div class="container">
+        <p id="cou"></p>
+        <p id="rese"></p>
+        <button id="push" type="button">Push the epic button</button>
+        <button id="reset"  type="button">Reset</button>
+
+    </div>
+    <script type="text/javascript">
+    $(document).ready(function (){
+        var socket = io();
+        $("#push").click(function(e){
+            e.preventDefault();
+            socket.emit("broad");
+        })
+        socket.on("updated",function(data){
+            $("#cou").text("you have clicked the button " + data.new + " times")
+            console.log(data.new)
+        })
+        $("#reset").click(function(e){
+            e.preventDefault();
+            socket.emit("resett")
+        })
+        socket.on("reseted", function(data){
+            $("#cou").text("You reset our counter to " + data.re)
+            console.log(data.re)
+
+        })
+        
+
+        })
+        
+    </script>
+</body>
+
+</html>
